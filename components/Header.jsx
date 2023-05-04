@@ -13,8 +13,30 @@ import MenuMobile from "./MenuMobile";
 const Header = () => {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [showCatMenu, setShowCatMenu] = useState(false);
-  const [show, setShowu] = useState("translate-y-0");
+  const [show, setShow] = useState("translate-y-0");
   const [lastScrolly, setLastScrolly] = useState(0);
+
+
+//   scroll funcionality
+  const controlNavbar = () => {
+    if (window.scrollY > 200) {
+      if (window.scrollY > lastScrolly && !mobileMenu) {
+        setShow("-translate-y-[80px]");
+      } else {
+        setShow("shadow-sm");
+      }
+    } else {
+      setShow("translate-y-0");
+    }
+    setLastScrolly(window.scrollY);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", controlNavbar);
+    return () => {
+      window.addEventListener("scroll", controlNavbar);
+    };
+  }, [lastScrolly]);
 
   return (
     <header
@@ -26,12 +48,15 @@ const Header = () => {
         </Link>
         <Menu showCatMenu={showCatMenu} setShowCatMenu={setShowCatMenu} />
 
-        {
-            mobileMenu && 
-            <MenuMobile showCatMenu={showCatMenu} setShowCatMenu={setShowCatMenu} setMobileMenu={setMobileMenu}/>
-        }
+        {mobileMenu && (
+          <MenuMobile
+            showCatMenu={showCatMenu}
+            setShowCatMenu={setShowCatMenu}
+            setMobileMenu={setMobileMenu}
+          />
+        )}
         <div className="flex items-center gap-2 text-black">
-        {/* Icon favorito start */}
+          {/* Icon favorito start */}
           <div className="w-8 md:w-12 h-8 md:h-12 rounded-full flex justify-center items-center hover:bg-black/[0.05] cursor-pointer relative">
             <IoMdHeartEmpty className="text-[19px]  md:text-[24px]" />
             <div
@@ -41,9 +66,9 @@ const Header = () => {
               51
             </div>
           </div>
-        {/* Icon favoritos final */}
+          {/* Icon favoritos final */}
 
-        {/* Icon cart start */}
+          {/* Icon cart start */}
           <div className="w-8 md:w-12 h-8 md:h-12 rounded-full flex justify-center items-center hover:bg-black/[0.05] cursor-pointer relative">
             <BsCart className="text-[15px]  md:text-[20px]" />
             <div
@@ -53,19 +78,23 @@ const Header = () => {
               5
             </div>
           </div>
-        {/* Icon cart final */}
+          {/* Icon cart final */}
 
-        {/* Mobile Icon inicio */}
+          {/* Mobile Icon inicio */}
           <div className="w-8 md:w-12 h-8 md:h-12 rounded-full flex justify-center items-center hover:bg-black/[0.05] cursor-pointer relative -mr-2">
             {mobileMenu ? (
-                <VscChromeClose className="text-[16px] " onClick={() => setMobileMenu(false)} />
+              <VscChromeClose
+                className="text-[16px] "
+                onClick={() => setMobileMenu(false)}
+              />
             ) : (
-                <BiMenuAltRight className="text-[20px] " onClick={() => setMobileMenu(true)} />
+              <BiMenuAltRight
+                className="text-[20px] "
+                onClick={() => setMobileMenu(true)}
+              />
             )}
           </div>
           {/* Mobile Icon final */}
-
-
         </div>
       </Wrapper>
     </header>
